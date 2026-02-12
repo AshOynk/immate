@@ -49,9 +49,10 @@ app.get('/api/tasks', async (req, res) => {
       filter.windowEnd = { $gte: now };
     }
     const list = await Task.find(filter).sort({ windowStart: 1 }).lean();
-    res.json(list);
-  } catch {
-    res.json([]);
+    return res.json(list);
+  } catch (err) {
+    console.error('GET /api/tasks error:', err);
+    return res.json([]);
   }
 });
 

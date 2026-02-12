@@ -18,7 +18,7 @@ tasksRouter.get(['/', ''], async (req, res) => {
     res.json(list);
   } catch (err) {
     console.error('List tasks error:', err);
-    res.status(500).json({ error: err.message || 'Failed to list tasks' });
+    res.json([]);
   }
 });
 

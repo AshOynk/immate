@@ -35,7 +35,7 @@ function extractFramesFromBlob(blob) {
     video.preload = 'metadata';
     video.onloadeddata = () => {
       const duration = video.duration;
-      if (!duration || duration <= 0) {
+      if (!Number.isFinite(duration) || duration <= 0) {
         URL.revokeObjectURL(url);
         return resolve([]);
       }
@@ -43,7 +43,11 @@ function extractFramesFromBlob(blob) {
       const ctx = canvas.getContext('2d');
       const times = Array.from({ length: NUM_FRAMES }, (_, i) =>
         i === NUM_FRAMES - 1 ? duration - 0.1 : (duration * i) / (NUM_FRAMES - 1)
-      );
+      ).filter((t) => Number.isFinite(t) && t >= 0);
+      if (times.length === 0) {
+        URL.revokeObjectURL(url);
+        return resolve([]);
+      }
       let index = 0;
       const frames = [];
       video.onseeked = () => {
@@ -55,7 +59,8 @@ function extractFramesFromBlob(blob) {
             if (b) frames.push(b);
             index++;
             if (index < times.length) {
-              video.currentTime = times[index];
+              const next = times[index];
+              if (Number.isFinite(next)) video.currentTime = next;
             } else {
               URL.revokeObjectURL(url);
               resolve(frames);
@@ -69,7 +74,8 @@ function extractFramesFromBlob(blob) {
         URL.revokeObjectURL(url);
         reject(new Error('Failed to load video for frame extraction'));
       };
-      video.currentTime = times[0];
+      const first = times[0];
+      if (Number.isFinite(first)) video.currentTime = first;
     };
     video.onerror = () => {
       URL.revokeObjectURL(url);
