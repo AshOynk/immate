@@ -15,6 +15,8 @@ const DEFAULT_TASKS = [
 ];
 const DEFAULT_RESIDENTS = ['RES-ASH', 'RES-001', 'RES-002', 'RES-003'];
 const NUM_FRAMES = 5;
+const CAMERA_FRONT = 'front';
+const CAMERA_BACK = 'back';
 
 function blobToBase64(blob) {
   return new Promise((resolve, reject) => {
@@ -97,7 +99,7 @@ export default function ComplianceSubmit() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [videoDevices, setVideoDevices] = useState([]);
-  const [selectedCameraId, setSelectedCameraId] = useState('');
+  const [selectedCameraId, setSelectedCameraId] = useState(CAMERA_FRONT);
   const streamRef = useRef(null);
   const recorderRef = useRef(null);
   const chunksRef = useRef([]);
@@ -111,7 +113,7 @@ export default function ComplianceSubmit() {
         const videoInputs = devices.filter((d) => d.kind === 'videoinput');
         setVideoDevices(videoInputs);
         if (videoInputs.length > 0) {
-          setSelectedCameraId((prev) => prev || videoInputs[0].deviceId);
+          setSelectedCameraId((prev) => (prev === CAMERA_FRONT || prev === CAMERA_BACK ? prev : videoInputs[0].deviceId));
         }
       })
       .catch(() => {});
@@ -147,9 +149,16 @@ export default function ComplianceSubmit() {
     }
     setMessage(null);
     try {
-      const videoConstraints = selectedCameraId
-        ? { deviceId: { exact: selectedCameraId }, width: { ideal: 1280 }, height: { ideal: 720 } }
-        : { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } };
+      let videoConstraints;
+      if (selectedCameraId === CAMERA_FRONT) {
+        videoConstraints = { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } };
+      } else if (selectedCameraId === CAMERA_BACK) {
+        videoConstraints = { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } };
+      } else if (selectedCameraId) {
+        videoConstraints = { deviceId: { exact: selectedCameraId }, width: { ideal: 1280 }, height: { ideal: 720 } };
+      } else {
+        videoConstraints = { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } };
+      }
       const stream = await navigator.mediaDevices.getUserMedia({
         video: videoConstraints,
         audio: true,
@@ -299,7 +308,9 @@ export default function ComplianceSubmit() {
             disabled={recording || loading}
             className="compliance-camera-select"
           >
-            {videoDevices.length === 0 && <option value="">No cameras found</option>}
+            <option value={CAMERA_FRONT}>Front camera (selfie)</option>
+            <option value={CAMERA_BACK}>Back camera</option>
+            {videoDevices.length > 0 && <option disabled>—— or specific device ——</option>}
             {videoDevices.map((d, i) => (
               <option key={d.deviceId} value={d.deviceId}>
                 {d.label || `Camera ${i + 1}`}
