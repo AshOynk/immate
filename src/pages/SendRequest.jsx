@@ -102,7 +102,7 @@ export default function SendRequest() {
             value={residentOptions.includes(residentId) ? residentId : ''}
             onChange={(e) => setResidentId(e.target.value)}
           >
-            <option value="">Select or type below</option>
+            <option value="">Select resident</option>
             {residentOptions.map((id) => (
               <option key={id} value={id}>{id}</option>
             ))}

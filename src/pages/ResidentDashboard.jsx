@@ -4,6 +4,8 @@ import './ResidentDashboard.css';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
+const DEFAULT_RESIDENTS = ['RES-ASH', 'RES-001', 'RES-002', 'RES-003'];
+
 function formatDate(d) {
   return new Date(d).toLocaleDateString(undefined, {
     weekday: 'short',
@@ -14,17 +16,52 @@ function formatDate(d) {
   });
 }
 
+// Demo data when backend is unreachable (e.g. no VITE_API_URL on Vercel)
+function getDemoDashboard(residentId) {
+  const now = new Date();
+  const weekEnd = new Date(now);
+  weekEnd.setDate(weekEnd.getDate() + (7 - now.getDay()));
+  return {
+    residentId,
+    tasks: [
+      { _id: 'demo-1', name: 'Send proof that kitchen is clean', description: 'Record a short video', windowEnd: weekEnd, starsAwarded: 1 },
+      { _id: 'demo-2', name: 'Send proof that bathroom is tidy', description: 'Record a short video', windowEnd: weekEnd, starsAwarded: 1 },
+      { _id: 'demo-3', name: 'Send proof that your room is tidy', description: 'Record a short video', windowEnd: weekEnd, starsAwarded: 1 },
+    ],
+    starsThisWeek: 0,
+    weeklyTarget: 10,
+    totalStars: 0,
+    totalValidated: 0,
+    bonusUnlocked: false,
+    bonusClaimedThisWeek: false,
+    weekEnds: weekEnd,
+    _demo: true,
+  };
+}
+
 export default function ResidentDashboard() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [residentId, setResidentId] = useState(() => searchParams.get('residentId') || 'RES-ASH');
   const [name, setName] = useState(() => searchParams.get('name') || '');
+  const [residentOptions, setResidentOptions] = useState([...DEFAULT_RESIDENTS]);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showRewards, setShowRewards] = useState(false);
   const [claiming, setClaiming] = useState(false);
   const [claimResult, setClaimResult] = useState(null);
+
+  useEffect(() => {
+    fetch(`${API_BASE}/api/residents`)
+      .then((res) => (res.ok ? res.json() : []))
+      .then((ids) => {
+        const fromApi = Array.isArray(ids) ? ids : [];
+        const merged = [...new Set([...DEFAULT_RESIDENTS, ...fromApi])].sort();
+        setResidentOptions(merged);
+      })
+      .catch(() => setResidentOptions(DEFAULT_RESIDENTS));
+  }, []);
 
   const loadDashboard = async (rid, n) => {
     if (!rid?.trim()) return;
@@ -34,12 +71,16 @@ export default function ResidentDashboard() {
       const params = new URLSearchParams({ residentId: rid.trim() });
       if (n?.trim()) params.set('name', n.trim());
       const res = await fetch(`${API_BASE}/api/resident/dashboard?${params}`);
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error || 'Failed to load');
-      setData(json);
+      const json = await res.json().catch(() => ({}));
+      if (res.ok) {
+        setData(json);
+        setError(null);
+      } else {
+        throw new Error(json.error || 'Failed to load');
+      }
     } catch (e) {
       setError(e.message);
-      setData(null);
+      setData(getDemoDashboard(rid.trim()));
     } finally {
       setLoading(false);
     }
@@ -91,11 +132,24 @@ export default function ResidentDashboard() {
         <div className="dashboard-chat">
           <div className="msg msg--assistant">
             <div className="msg-content">
-              <p><strong>iMmate.</strong> Your resident ID is below — tap <strong>Open my dashboard</strong> to see your tasks and submit proof.</p>
+              <p><strong>iMmate.</strong> Select your resident ID (or type below) and tap <strong>Open my dashboard</strong> to see your tasks and submit proof.</p>
             </div>
           </div>
         </div>
         <form onSubmit={handleGo} className="dashboard-login">
+          <label className="dashboard-login-label">
+            Resident
+            <select
+              value={residentOptions.includes(residentId) ? residentId : ''}
+              onChange={(e) => setResidentId(e.target.value)}
+              className="dashboard-login-select"
+            >
+              <option value="">Select resident</option>
+              {residentOptions.map((id) => (
+                <option key={id} value={id}>{id}</option>
+              ))}
+            </select>
+          </label>
           <input
             type="text"
             placeholder="Resident ID (e.g. RES-ASH)"
@@ -136,6 +190,8 @@ export default function ResidentDashboard() {
       </div>
     );
   }
+
+  const isDemo = data?._demo;
 
   if (!data) return null;
 

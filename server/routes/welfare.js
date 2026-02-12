@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import mongoose from 'mongoose';
 import { WelfareCheckIn, moodEnum } from '../models/WelfareCheckIn.js';
 import { getFirstWelfareMessage, getNextWelfareMessage } from '../services/welfareClaude.js';
 
@@ -7,6 +8,9 @@ export const welfareRouter = Router();
 // POST /api/welfare/checkin - start a check-in (mood already selected by user)
 welfareRouter.post('/checkin', async (req, res) => {
   try {
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(503).json({ error: 'Service temporarily unavailable. Try again in a moment.' });
+    }
     const { residentId, name, mood } = req.body;
     if (!residentId || !mood) {
       return res.status(400).json({ error: 'Missing required fields: residentId, mood' });
@@ -32,7 +36,7 @@ welfareRouter.post('/checkin', async (req, res) => {
     });
   } catch (err) {
     console.error('Welfare checkin start error:', err);
-    res.status(500).json({ error: 'Failed to start check-in' });
+    res.status(500).json({ error: err.message || 'Failed to start check-in' });
   }
 });
 

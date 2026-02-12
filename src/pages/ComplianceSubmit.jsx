@@ -4,6 +4,16 @@ import './ComplianceSubmit.css';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 const MAX_RECORDING_MS = 5 * 60 * 1000; // 5 min
+
+const now = new Date();
+const weekEnd = new Date(now);
+weekEnd.setDate(weekEnd.getDate() + 7);
+const DEFAULT_TASKS = [
+  { _id: 'default-1', name: 'Send proof that kitchen is clean', windowStart: now, windowEnd: weekEnd },
+  { _id: 'default-2', name: 'Send proof that bathroom is tidy', windowStart: now, windowEnd: weekEnd },
+  { _id: 'default-3', name: 'Send proof that your room is tidy', windowStart: now, windowEnd: weekEnd },
+];
+const DEFAULT_RESIDENTS = ['RES-ASH', 'RES-001', 'RES-002', 'RES-003'];
 const NUM_FRAMES = 5;
 
 function blobToBase64(blob) {
@@ -71,9 +81,9 @@ function extractFramesFromBlob(blob) {
 
 export default function ComplianceSubmit() {
   const location = useLocation();
-  const [tasks, setTasks] = useState([]);
-  const [taskId, setTaskId] = useState('');
-  const [residentId, setResidentId] = useState(() => location.state?.residentId || '');
+  const [tasks, setTasks] = useState(DEFAULT_TASKS);
+  const [taskId, setTaskId] = useState(DEFAULT_TASKS[0]._id);
+  const [residentId, setResidentId] = useState(() => location.state?.residentId || 'RES-ASH');
   const [recording, setRecording] = useState(false);
   const [recordedBlob, setRecordedBlob] = useState(null);
   const [recordedAt, setRecordedAt] = useState(null);
@@ -88,14 +98,18 @@ export default function ComplianceSubmit() {
     fetch(`${API_BASE}/api/tasks?active=true&inWindow=true`)
       .then((r) => r.json())
       .then((list) => {
-        const arr = Array.isArray(list) ? list : [];
+        const arr = Array.isArray(list) && list.length > 0 ? list : DEFAULT_TASKS;
         setTasks(arr);
         const fromState = location.state?.taskId;
         if (fromState && arr.some((t) => t._id === fromState)) setTaskId(fromState);
+        else if (arr.length > 0) setTaskId(arr[0]._id);
         const rid = location.state?.residentId;
         if (rid) setResidentId((prev) => prev || rid);
       })
-      .catch(() => setTasks([]));
+      .catch(() => {
+        setTasks(DEFAULT_TASKS);
+        setTaskId(DEFAULT_TASKS[0]._id);
+      });
   }, [location.state?.taskId, location.state?.residentId]);
 
   const startRecording = useCallback(async () => {
@@ -123,11 +137,12 @@ export default function ComplianceSubmit() {
       recorder.onstop = () => {
         stream.getTracks().forEach((t) => t.stop());
         const blob = new Blob(chunksRef.current, { type: 'video/webm' });
+        const when = new Date();
         setRecordedBlob(blob);
+        setRecordedAt(when);
         setPreviewUrl(URL.createObjectURL(blob));
       };
       recorder.start(1000);
-      setRecordedAt(new Date());
       setRecording(true);
     } catch (err) {
       setMessage({ type: 'error', text: 'Camera/mic access denied or unavailable.' });
@@ -159,10 +174,11 @@ export default function ComplianceSubmit() {
       setMessage({ type: 'error', text: 'Enter resident ID.' });
       return;
     }
-    if (!recordedBlob || !recordedAt) {
+    if (!recordedBlob) {
       setMessage({ type: 'error', text: 'Record a video first (live in this app).' });
       return;
     }
+    const timestamp = recordedAt || new Date();
     setLoading(true);
     setMessage(null);
     try {
@@ -175,8 +191,8 @@ export default function ComplianceSubmit() {
         body: JSON.stringify({
           taskId,
           residentId: residentId.trim(),
-          timestamp: recordedAt.toISOString(),
-          recordedAt: recordedAt.toISOString(),
+          timestamp: timestamp.toISOString(),
+          recordedAt: timestamp.toISOString(),
           videoBase64,
           framesBase64: framesBase64.slice(0, 5),
         }),
@@ -218,13 +234,24 @@ export default function ComplianceSubmit() {
           {tasks.length === 0 && <span className="field-hint">No tasks in window. Ask management to add one.</span>}
         </label>
         <label>
-          Resident ID *
+          Resident *
+          <select
+            value={DEFAULT_RESIDENTS.includes(residentId) ? residentId : ''}
+            onChange={(e) => setResidentId(e.target.value)}
+            disabled={loading || recording}
+          >
+            <option value="">— Select resident —</option>
+            {DEFAULT_RESIDENTS.map((id) => (
+              <option key={id} value={id}>{id}</option>
+            ))}
+          </select>
           <input
             type="text"
             value={residentId}
             onChange={(e) => setResidentId(e.target.value)}
-            placeholder="e.g. RES-001"
+            placeholder="Or type resident ID"
             disabled={loading || recording}
+            className="compliance-resident-input"
           />
         </label>
         <label>

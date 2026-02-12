@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import mongoose from 'mongoose';
 import { Submission } from '../models/Submission.js';
 import { Task } from '../models/Task.js';
 import { ResidentReward } from '../models/ResidentReward.js';
@@ -8,9 +9,12 @@ export const complianceRouter = Router();
 
 const MAX_AGE_MS = 30 * 60 * 1000; // 30 min - recording must be recent (live-only)
 
-// GET /api/residents - list resident IDs (for management "send request" page)
-complianceRouter.get('/residents', async (req, res) => {
+// GET /api/residents - list resident IDs. Match with or without leading slash.
+complianceRouter.get(['/residents', 'residents'], async (req, res) => {
   try {
+    if (mongoose.connection.readyState !== 1) {
+      return res.json([]);
+    }
     const [fromSubmissions, fromRewards] = await Promise.all([
       Submission.distinct('residentId'),
       ResidentReward.distinct('residentId'),
@@ -19,7 +23,29 @@ complianceRouter.get('/residents', async (req, res) => {
     res.json(ids);
   } catch (err) {
     console.error('List residents error:', err);
-    res.status(500).json({ error: 'Failed to list residents' });
+    res.json([]);
+  }
+});
+
+// GET /api/tasks - list tasks. Match with or without leading slash.
+complianceRouter.get(['/tasks', 'tasks'], async (req, res) => {
+  try {
+    if (mongoose.connection.readyState !== 1) {
+      return res.json([]);
+    }
+    const { active, inWindow } = req.query;
+    const now = new Date();
+    let filter = {};
+    if (active === 'true') filter.active = true;
+    if (inWindow === 'true') {
+      filter.windowStart = { $lte: now };
+      filter.windowEnd = { $gte: now };
+    }
+    const list = await Task.find(filter).sort({ windowStart: 1 }).lean();
+    res.json(list);
+  } catch (err) {
+    console.error('List tasks error:', err);
+    res.json([]);
   }
 });
 
@@ -91,8 +117,9 @@ complianceRouter.post('/submit', async (req, res) => {
 });
 
 // GET /api/submissions - list all for review dashboard
-complianceRouter.get('/submissions', async (req, res) => {
+complianceRouter.get(['/submissions', 'submissions'], async (req, res) => {
   try {
+    if (mongoose.connection.readyState !== 1) return res.json([]);
     const list = await Submission.find()
       .select('-videoBase64')
       .populate('taskId', 'name description windowStart windowEnd starsAwarded')
@@ -101,7 +128,7 @@ complianceRouter.get('/submissions', async (req, res) => {
     res.json(list);
   } catch (err) {
     console.error('List submissions error:', err);
-    res.status(500).json({ error: 'Failed to list submissions' });
+    res.json([]);
   }
 });
 

@@ -228,11 +228,32 @@
   max-width: 320px;
 }
 
+.dashboard-login-label {
+  display: block;
+  font-weight: 500;
+  font-size: 0.9rem;
+  margin-bottom: 0.35rem;
+  color: var(--color-text);
+}
+
+.dashboard-login-select {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  background: var(--color-bg);
+  color: var(--color-text);
+  margin-bottom: 0.75rem;
+}
+
 .dashboard-login input {
   padding: 0.65rem 0.85rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   font-size: 1rem;
+  background: var(--color-bg);
+  color: var(--color-text);
 }
 
 .dashboard-login button {

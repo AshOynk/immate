@@ -16,6 +16,8 @@ import { residentDashboardRouter } from './routes/residentDashboard.js';
 import { authRouter } from './routes/auth.js';
 import { residentsRouter } from './routes/residents.js';
 import { Task } from './models/Task.js';
+import { Submission } from './models/Submission.js';
+import { ResidentReward } from './models/ResidentReward.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -23,6 +25,35 @@ const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
+
+// Explicit routes so GET /api/residents and GET /api/tasks always work (avoid 404 from router path)
+app.get('/api/residents', async (req, res) => {
+  try {
+    if (mongoose.connection.readyState !== 1) return res.json([]);
+    const [a, b] = await Promise.all([Submission.distinct('residentId'), ResidentReward.distinct('residentId')]);
+    const ids = [...new Set([...a, ...b])].filter(Boolean).sort();
+    res.json(ids);
+  } catch {
+    res.json([]);
+  }
+});
+app.get('/api/tasks', async (req, res) => {
+  try {
+    if (mongoose.connection.readyState !== 1) return res.json([]);
+    const { active, inWindow } = req.query;
+    const now = new Date();
+    let filter = {};
+    if (active === 'true') filter.active = true;
+    if (inWindow === 'true') {
+      filter.windowStart = { $lte: now };
+      filter.windowEnd = { $gte: now };
+    }
+    const list = await Task.find(filter).sort({ windowStart: 1 }).lean();
+    res.json(list);
+  } catch {
+    res.json([]);
+  }
+});
 
 async function seedDefaultTasks() {
   const count = await Task.countDocuments();
