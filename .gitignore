@@ -1,0 +1,26 @@
+# Env and secrets (do not commit)
+.env
+.env.local
+.env.*.local
+
+# Dependencies and build
+node_modules/
+dist/
+
+# Logs and OS
+*.log
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+
+# Expo / mobile
+mobile/node_modules/
+mobile/.expo/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*

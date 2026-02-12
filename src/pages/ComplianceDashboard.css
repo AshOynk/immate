@@ -1,0 +1,231 @@
+.compliance-dashboard {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.compliance-dashboard h1 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-text);
+}
+
+.compliance-dashboard .compliance-nav {
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.compliance-dashboard .compliance-nav a {
+  color: var(--color-accent);
+}
+
+.dashboard-loading,
+.dashboard-empty {
+  color: var(--color-text-muted);
+  margin-top: 1rem;
+}
+
+.submission-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.submission-item {
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  box-shadow: var(--shadow);
+}
+
+.submission-item--pass {
+  border-left: 4px solid var(--color-success);
+}
+
+.submission-item--fail {
+  border-left: 4px solid var(--color-error);
+}
+
+.submission-item--pending {
+  border-left: 4px solid var(--color-warning);
+}
+
+.submission-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.submission-task {
+  font-weight: 600;
+  color: var(--color-accent);
+  margin-right: 0.25rem;
+}
+
+.submission-resident {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.submission-time {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.submission-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  background: var(--color-border);
+  color: var(--color-text);
+}
+
+.submission-item--pass .submission-badge {
+  background: var(--color-primary-light);
+  color: #1a5a00;
+}
+
+.submission-item--fail .submission-badge {
+  background: #ffebeb;
+  color: var(--color-error);
+}
+
+.submission-item--pending .submission-badge {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.ai-badge {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.ai-badge--pass {
+  background: var(--color-primary-light);
+  color: #1a5a00;
+}
+
+.ai-badge--fail {
+  background: #ffebeb;
+  color: var(--color-error);
+}
+
+.submission-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.submission-actions button,
+.detail-actions button {
+  padding: 0.4rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-review {
+  background: var(--color-accent-light);
+  color: var(--color-accent);
+}
+
+.btn-pass {
+  background: var(--color-primary-light);
+  color: #1a5a00;
+}
+
+.btn-fail {
+  background: #ffebeb;
+  color: var(--color-error);
+}
+
+.btn-close {
+  background: var(--color-border);
+  color: var(--color-text);
+  margin-top: 0.75rem;
+}
+
+.detail-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.detail-modal {
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  max-width: 560px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: auto;
+  box-shadow: var(--shadow-hover);
+}
+
+.detail-modal h3 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.15rem;
+}
+
+.detail-time,
+.detail-status {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.detail-ai {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  font-size: 0.9rem;
+}
+
+.detail-ai-summary {
+  margin: 0.35rem 0 0 0;
+  color: var(--color-text);
+}
+
+.detail-ai-live {
+  margin: 0.5rem 0 0 0;
+  color: var(--color-error);
+  font-weight: 500;
+}
+
+.detail-ai-issues {
+  margin: 0.5rem 0 0 0;
+  padding-left: 1.25rem;
+  color: var(--color-text-muted);
+}
+
+.detail-video {
+  width: 100%;
+  max-height: 320px;
+  border-radius: var(--radius-sm);
+  background: #000;
+  margin-bottom: 1rem;
+}
+
+.detail-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}

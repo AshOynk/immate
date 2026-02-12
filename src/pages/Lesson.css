@@ -1,0 +1,185 @@
+.lesson {
+  animation: fadeIn 0.4s ease;
+}
+
+.lesson-loading {
+  text-align: center;
+  padding: 48px;
+  color: var(--color-text-muted);
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 24px;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: var(--color-primary);
+}
+
+.lesson-header {
+  margin-bottom: 32px;
+}
+
+.lesson-header h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 8px 0 0;
+  color: var(--color-text);
+}
+
+.difficulty {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.difficulty-beginner {
+  background: var(--color-accent-light);
+  color: var(--color-accent);
+}
+
+.explanation {
+  margin-bottom: 32px;
+}
+
+.explanation h2,
+.challenge h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 16px;
+  color: var(--color-text);
+}
+
+.explanation-text p {
+  margin: 0 0 16px;
+  color: var(--color-text);
+  line-height: 1.7;
+}
+
+.explanation-text p:last-child {
+  margin-bottom: 0;
+}
+
+.explanation-text code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--color-border);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.challenge {
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+
+.editor-wrap {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.run-row {
+  margin-bottom: 16px;
+}
+
+.run-btn {
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  transition: background 0.2s;
+}
+
+.run-btn:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+}
+
+.run-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.result {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+}
+
+.result.passed {
+  background: var(--color-primary-light);
+  border: 1px solid var(--color-primary);
+}
+
+.result.failed {
+  background: #fff5f5;
+  border: 1px solid var(--color-error);
+}
+
+.result-icon {
+  font-size: 1.25rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.result.passed .result-icon {
+  color: var(--color-success);
+}
+
+.result.failed .result-icon {
+  color: var(--color-error);
+}
+
+.result-output,
+.result-error,
+.result-hint {
+  margin: 8px 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.result-hint {
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.result code {
+  font-family: var(--font-mono);
+  background: rgba(0,0,0,0.06);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.success-toast {
+  margin-top: 16px;
+  padding: 16px;
+  background: var(--color-primary);
+  color: white;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  text-align: center;
+  animation: toastIn 0.3s ease;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
