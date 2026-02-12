@@ -139,9 +139,11 @@
     grid-template-columns: 1fr;
     grid-template-rows: auto auto;
     gap: 12px;
+    text-align: center;
   }
   .header-left {
     order: 1;
+    justify-content: center;
   }
   .logo {
     order: 0;
@@ -149,6 +151,10 @@
   .header-right {
     order: 2;
     justify-content: center;
+    flex-wrap: wrap;
+  }
+  .header-dashboard {
+    flex-shrink: 0;
   }
   .progress-bar-wrap {
     width: 100%;
