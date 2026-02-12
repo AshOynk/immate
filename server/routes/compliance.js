@@ -8,6 +8,21 @@ export const complianceRouter = Router();
 
 const MAX_AGE_MS = 30 * 60 * 1000; // 30 min - recording must be recent (live-only)
 
+// GET /api/residents - list resident IDs (for management "send request" page)
+complianceRouter.get('/residents', async (req, res) => {
+  try {
+    const [fromSubmissions, fromRewards] = await Promise.all([
+      Submission.distinct('residentId'),
+      ResidentReward.distinct('residentId'),
+    ]);
+    const ids = [...new Set([...fromSubmissions, ...fromRewards])].filter(Boolean).sort();
+    res.json(ids);
+  } catch (err) {
+    console.error('List residents error:', err);
+    res.status(500).json({ error: 'Failed to list residents' });
+  }
+});
+
 // POST /api/submit - live recording only; requires taskId (within task window); AI checks; notifies Eufy
 complianceRouter.post('/submit', async (req, res) => {
   try {

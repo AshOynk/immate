@@ -26,8 +26,8 @@ export default function SendRequest() {
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
-    fetch(`${API_BASE}/api/tasks/residents/list`)
-      .then((res) => res.json())
+    fetch(`${API_BASE}/api/residents`)
+      .then((res) => (res.ok ? res.json() : []))
       .then((ids) => {
         if (!cancelled && Array.isArray(ids)) setResidentOptions(ids);
       })

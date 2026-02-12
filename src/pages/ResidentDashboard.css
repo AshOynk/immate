@@ -237,12 +237,17 @@
 
 .dashboard-login button {
   padding: 0.75rem 1rem;
-  background: var(--color-primary);
-  color: var(--color-on-primary);
+  background: var(--color-text);
+  color: var(--color-bg);
   border: none;
   border-radius: var(--radius-sm);
   font-weight: 600;
   cursor: pointer;
+}
+
+.dashboard-go-btn {
+  padding: 0.9rem 1.25rem !important;
+  font-size: 1.05rem !important;
 }
 
 .dashboard-loading,

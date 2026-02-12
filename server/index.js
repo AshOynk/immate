@@ -14,6 +14,7 @@ import { vouchersRouter } from './routes/vouchers.js';
 import { welfareRouter } from './routes/welfare.js';
 import { residentDashboardRouter } from './routes/residentDashboard.js';
 import { authRouter } from './routes/auth.js';
+import { residentsRouter } from './routes/residents.js';
 import { Task } from './models/Task.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -56,6 +57,7 @@ app.use('/api/lessons', lessonsRouter);
 app.use('/api/progress', progressRouter);
 app.use('/api', complianceRouter);
 app.use('/api/tasks', tasksRouter);
+app.use('/api/residents', residentsRouter);
 app.use('/api/rewards', rewardsRouter);
 app.use('/api/vouchers', vouchersRouter);
 app.use('/api/welfare', welfareRouter);
