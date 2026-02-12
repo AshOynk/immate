@@ -42,7 +42,7 @@
   width: 100%;
   padding: 0.85rem 1rem;
   background: var(--color-primary);
-  color: #fff;
+  color: var(--color-bg);
   border: none;
   border-radius: var(--radius-sm);
   font-size: 1rem;
@@ -233,7 +233,7 @@
 .btn-send {
   padding: 0.5rem 1rem;
   background: var(--color-primary);
-  color: #fff;
+  color: var(--color-bg);
   border: none;
   border-radius: 8px;
   font-weight: 600;

@@ -50,7 +50,9 @@ export default function Login() {
   return (
     <div className="login-page">
       <div className="login-card">
-        <h1>iMmate</h1>
+        <div className="login-logo-wrap">
+          <img src="/images/logo-white.svg" alt="iMmate" className="login-logo" />
+        </div>
         <p className="login-subtitle">{mode === 'login' ? 'Sign in' : 'Create account'}</p>
         <form onSubmit={handleSubmit} className="login-form">
           <label>

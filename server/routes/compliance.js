@@ -4,8 +4,6 @@ import { Task } from '../models/Task.js';
 import { ResidentReward } from '../models/ResidentReward.js';
 import { analyzeComplianceFrames } from '../services/claude.js';
 import { notifySubmissionReceived, notifyCheckTriggered } from '../services/eufy.js';
-import { requireAuth, requireAdmin } from '../middleware/auth.js';
-
 export const complianceRouter = Router();
 
 const MAX_AGE_MS = 30 * 60 * 1000; // 30 min - recording must be recent (live-only)
@@ -77,8 +75,8 @@ complianceRouter.post('/submit', async (req, res) => {
   }
 });
 
-// GET /api/submissions - list all for review dashboard (admin only)
-complianceRouter.get('/submissions', requireAuth, requireAdmin, async (req, res) => {
+// GET /api/submissions - list all for review dashboard
+complianceRouter.get('/submissions', async (req, res) => {
   try {
     const list = await Submission.find()
       .select('-videoBase64')
@@ -92,8 +90,8 @@ complianceRouter.get('/submissions', requireAuth, requireAdmin, async (req, res)
   }
 });
 
-// GET /api/submissions/:id - get one (admin only)
-complianceRouter.get('/submissions/:id', requireAuth, requireAdmin, async (req, res) => {
+// GET /api/submissions/:id - get one
+complianceRouter.get('/submissions/:id', async (req, res) => {
   try {
     const doc = await Submission.findById(req.params.id)
       .populate('taskId', 'name description windowStart windowEnd starsAwarded')
@@ -106,8 +104,8 @@ complianceRouter.get('/submissions/:id', requireAuth, requireAdmin, async (req, 
   }
 });
 
-// PATCH /api/submissions/:id - update status (admin only)
-complianceRouter.patch('/submissions/:id', requireAuth, requireAdmin, async (req, res) => {
+// PATCH /api/submissions/:id - update status
+complianceRouter.patch('/submissions/:id', async (req, res) => {
   try {
     const { status } = req.body;
     if (!['pass', 'fail'].includes(status)) {

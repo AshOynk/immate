@@ -44,6 +44,16 @@ authRouter.post('/register', async (req, res) => {
   }
 });
 
+// Seed login: ash@oynk.co.uk with SEED_LOGIN_PASSWORD (or "immate-dev" in dev) — creates admin if needed
+const SEED_EMAIL = 'ash@oynk.co.uk';
+function isSeedLogin(username, password) {
+  const normalized = username?.trim().toLowerCase();
+  if (normalized !== SEED_EMAIL) return false;
+  if (process.env.SEED_LOGIN_PASSWORD && password === process.env.SEED_LOGIN_PASSWORD) return true;
+  if (process.env.NODE_ENV !== 'production' && password === 'immate-dev') return true;
+  return false;
+}
+
 // POST /api/auth/login
 authRouter.post('/login', async (req, res) => {
   try {
@@ -51,7 +61,36 @@ authRouter.post('/login', async (req, res) => {
     if (!username?.trim() || !password) {
       return res.status(400).json({ error: 'Username and password required' });
     }
-    const user = await User.findOne({ username: username.trim().toLowerCase() });
+    const normalized = username.trim().toLowerCase();
+
+    // Seed login: create or update admin for ash@oynk.co.uk when password matches
+    if (isSeedLogin(username, password)) {
+      let user = await User.findOne({ username: normalized });
+      const passwordHash = await hashPassword(password);
+      if (!user) {
+        user = await User.create({
+          username: normalized,
+          passwordHash,
+          role: 'admin',
+          name: 'Ash',
+        });
+      } else {
+        user.passwordHash = passwordHash;
+        user.role = 'admin';
+        await user.save();
+      }
+      const token = jwt.sign(
+        { id: user._id.toString(), username: user.username, role: user.role },
+        JWT_SECRET,
+        { expiresIn: JWT_EXPIRES }
+      );
+      return res.json({
+        token,
+        user: { id: user._id, username: user.username, role: user.role, residentId: user.residentId, name: user.name },
+      });
+    }
+
+    const user = await User.findOne({ username: normalized });
     if (!user) return res.status(401).json({ error: 'Invalid username or password' });
     const ok = await checkPassword(password, user.passwordHash);
     if (!ok) return res.status(401).json({ error: 'Invalid username or password' });

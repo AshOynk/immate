@@ -7,6 +7,8 @@ const taskSchema = new mongoose.Schema(
     windowStart: { type: Date, required: true },
     windowEnd: { type: Date, required: true },
     starsAwarded: { type: Number, default: 1 },
+    /** When set, this task is a push-style request for this resident (management → resident) */
+    assignedToResidentId: { type: String, trim: true },
     eufyTaskId: { type: String, trim: true },
     cufyTaskId: { type: String, trim: true }, // deprecated alias for eufyTaskId
     active: { type: Boolean, default: true },

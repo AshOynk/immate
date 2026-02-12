@@ -74,7 +74,7 @@
 
 .btn-record {
   background: var(--color-error);
-  color: #fff;
+  color: var(--color-bg);
 }
 
 .btn-record:hover:not(:disabled) {
@@ -83,7 +83,7 @@
 
 .btn-stop {
   background: var(--color-primary);
-  color: #fff;
+  color: var(--color-bg);
   margin-left: 0.75rem;
 }
 
@@ -146,7 +146,7 @@
 .compliance-form button {
   padding: 0.75rem 1.25rem;
   background: var(--color-primary);
-  color: #fff;
+  color: var(--color-bg);
   border: none;
   border-radius: var(--radius-sm);
   font-weight: 600;

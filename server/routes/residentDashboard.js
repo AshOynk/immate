@@ -39,6 +39,10 @@ residentDashboardRouter.get('/dashboard', async (req, res) => {
         active: true,
         windowStart: { $lte: now },
         windowEnd: { $gte: now },
+        $or: [
+          { assignedToResidentId: { $in: [null, ''] } },
+          { assignedToResidentId: residentId },
+        ],
       })
         .sort({ windowEnd: 1 })
         .lean(),

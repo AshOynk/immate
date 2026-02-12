@@ -1,6 +1,20 @@
 # Run iMmate on your device
 
-## Option 1: Web app on your phone (same Wi‑Fi)
+## Competition: use on your phone right now
+
+**Fastest (no install):** On your phone, open the browser (Safari or Chrome) and go to:
+
+**https://immate.oynk.co.uk**
+
+Log in with **ash@oynk.co.uk** and your password. Use the app as normal.
+
+**Make it app-like:** In Safari, tap **Share** → **Add to Home Screen** → name it “iMmate”. An icon appears on your home screen and opens the app full screen for the competition.
+
+**If you want it in an app shell:** Install **Expo Go** from the App Store, then see **Option 2A** below (same URL in a full-screen app).
+
+---
+
+## Option 1: Web app on your phone (same Wi‑Fi, local dev)
 
 Use the app in the browser on your iPhone/Android. Your phone and computer must be on the same Wi‑Fi.
 

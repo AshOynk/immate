@@ -1,0 +1,142 @@
+.send-request {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.send-request h1 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-text);
+}
+
+.send-request-intro {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+}
+
+.send-request-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--color-text);
+}
+
+.send-request-form select,
+.send-request-form input[type="text"],
+.send-request-form input[type="date"],
+.send-request-form input[type="time"] {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  background: var(--color-bg);
+  color: var(--color-text);
+  margin-bottom: 1rem;
+}
+
+.send-request-resident-input {
+  margin-top: 0.5rem;
+}
+
+.send-request-task-options {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.send-request-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 400;
+  cursor: pointer;
+  min-width: 5rem;
+}
+
+.send-request-radio input {
+  width: auto;
+  margin: 0;
+}
+
+.send-request-task-options select {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.send-request-custom-input {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.send-request-due {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.35rem;
+}
+
+.send-request-due input {
+  margin-bottom: 0;
+}
+
+.send-request-due input[type="date"] {
+  flex: 1;
+}
+
+.send-request-due input[type="time"] {
+  width: 6rem;
+}
+
+.send-request-message {
+  margin: 1rem 0 0;
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.send-request-message--success {
+  color: var(--color-success);
+}
+
+.send-request-message--error {
+  color: var(--color-error);
+}
+
+.send-request-form button[type="submit"] {
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--color-text);
+  color: var(--color-bg);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.send-request-form button[type="submit"]:hover:not(:disabled) {
+  background: var(--color-text-muted);
+  color: var(--color-bg);
+}
+
+.send-request-form button[type="submit"]:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.send-request-back {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.send-request-back a {
+  color: var(--color-text-muted);
+}
+
+.send-request-back a:hover {
+  color: var(--color-text);
+}

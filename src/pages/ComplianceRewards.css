@@ -32,7 +32,7 @@
 .rewards-lookup button {
   padding: 0.6rem 1rem;
   background: var(--color-primary);
-  color: #fff;
+  color: var(--color-bg);
   border: none;
   border-radius: var(--radius-sm);
   font-weight: 500;
@@ -124,7 +124,7 @@
 .btn-redeem {
   padding: 0.35rem 0.75rem;
   background: var(--color-accent);
-  color: #fff;
+  color: var(--color-bg);
   border: none;
   border-radius: 8px;
   font-size: 0.9rem;

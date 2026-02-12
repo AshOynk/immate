@@ -8,17 +8,23 @@
 
 .login-card {
   width: 100%;
-  max-width: 380px;
-  background: var(--color-surface);
+  max-width: 360px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 2rem;
+  padding: 2.25rem;
 }
 
-.login-card h1 {
-  margin: 0 0 0.25rem 0;
-  font-size: 1.75rem;
-  text-align: center;
+.login-logo-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.login-logo {
+  height: 36px;
+  width: auto;
+  display: block;
 }
 
 .login-subtitle {
@@ -43,10 +49,16 @@
 .login-form input,
 .login-form select {
   width: 100%;
-  padding: 0.6rem 0.75rem;
+  padding: 0.65rem 0.85rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   font-size: 1rem;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.login-form input::placeholder {
+  color: var(--color-text-muted);
 }
 
 .login-role {
@@ -58,17 +70,19 @@
   width: 100%;
   padding: 0.75rem 1rem;
   margin-top: 0.5rem;
-  background: var(--color-primary);
-  color: var(--color-on-primary);
+  background: var(--color-text);
+  color: var(--color-bg);
   border: none;
   border-radius: var(--radius-sm);
-  font-size: 1rem;
+  font-size: 0.9375rem;
   font-weight: 600;
   cursor: pointer;
+  letter-spacing: 0.02em;
 }
 
 .login-form button[type="submit"]:hover:not(:disabled) {
-  background: var(--color-primary-hover);
+  background: var(--color-text-muted);
+  color: var(--color-bg);
 }
 
 .login-form button[type="submit"]:disabled {
@@ -92,22 +106,27 @@
 .link-button {
   background: none;
   border: none;
-  color: var(--color-accent);
+  color: var(--color-text);
   font-weight: 500;
   cursor: pointer;
   padding: 0;
+  text-decoration: underline;
 }
 
 .link-button:hover {
-  text-decoration: underline;
+  color: var(--color-text-muted);
 }
 
 .login-back {
   margin: 1.25rem 0 0 0;
   text-align: center;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
 }
 
 .login-back a {
-  color: var(--color-accent);
+  color: var(--color-text-muted);
+}
+
+.login-back a:hover {
+  color: var(--color-text);
 }

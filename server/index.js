@@ -14,6 +14,7 @@ import { vouchersRouter } from './routes/vouchers.js';
 import { welfareRouter } from './routes/welfare.js';
 import { residentDashboardRouter } from './routes/residentDashboard.js';
 import { authRouter } from './routes/auth.js';
+import { Task } from './models/Task.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -22,9 +23,26 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 
+async function seedDefaultTasks() {
+  const count = await Task.countDocuments();
+  if (count > 0) return;
+  const now = new Date();
+  const windowEnd = new Date(now);
+  windowEnd.setDate(windowEnd.getDate() + 7);
+  const defaults = [
+    { name: 'Send proof that kitchen is clean', description: 'Record a short video showing the kitchen is clean', windowStart: now, windowEnd, starsAwarded: 1, active: true },
+    { name: 'Send proof that bathroom is tidy', description: 'Record a short video showing the bathroom is tidy', windowStart: now, windowEnd, starsAwarded: 1, active: true },
+    { name: 'Send proof that your room is tidy', description: 'Record a short video showing your room is tidy', windowStart: now, windowEnd, starsAwarded: 1, active: true },
+  ];
+  await Task.insertMany(defaults);
+  console.log('Seeded default tasks:', defaults.length);
+}
+
 const MONGODB_URI = process.env.MONGODB_URI || process.env.MONGO_URI;
 if (MONGODB_URI) {
-  mongoose.connect(MONGODB_URI).then(() => console.log('MongoDB connected')).catch((err) => console.error('MongoDB connection error:', err));
+  mongoose.connect(MONGODB_URI)
+    .then(() => { console.log('MongoDB connected'); return seedDefaultTasks(); })
+    .catch((err) => console.error('MongoDB connection error:', err));
 } else {
   console.warn('No MONGODB_URI set; compliance API will fail until configured.');
 }

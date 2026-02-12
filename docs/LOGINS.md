@@ -1,5 +1,7 @@
 # Logins (iMmate)
 
+**Login on your phone won’t work until the backend is running.** Right now only the frontend is live (Vercel). You need to put the backend on **Railway** and add **VITE_API_URL** in Vercel. Step-by-step: **[docs/BACKEND-SETUP.md](BACKEND-SETUP.md)**.
+
 ## Overview
 
 - **Residents** can use the app without logging in (enter resident ID on the dashboard). They can optionally **register** and log in; if their account has a `residentId`, the dashboard can use it.
@@ -15,6 +17,27 @@
 6. You are now logged in as admin. Use **Review** in the header to open the compliance review dashboard.
 
 You can create more admins or residents the same way (role: Resident or Admin).
+
+## Your admin login (seed)
+
+You can always log in as admin with:
+
+- **Email:** `ash@oynk.co.uk`
+- **Password:**
+  - **Production (Railway / phone):** The password you set in Railway as **SEED_LOGIN_PASSWORD**. Use that same password when you log in on your phone.
+  - **Local:** Use password **`immate-dev`** (no env needed).
+
+The first time you use this, the server creates your admin user. You get full access (Review dashboard, etc.).
+
+### Log in on your phone
+
+1. Open **https://immate.oynk.co.uk** in Safari or Chrome.
+2. Tap **Log in**.
+3. **Email or username:** `ash@oynk.co.uk`
+4. **Password:** the same password you set in Railway for **SEED_LOGIN_PASSWORD** (e.g. if you set `SEED_LOGIN_PASSWORD=Lolislawa2`, use `Lolislawa2`).
+5. Tap **Sign in**.
+
+If you see **“Cannot reach server”** or **“Invalid username or password”**: (1) In **Railway** → your service → **Variables**, add or set **SEED_LOGIN_PASSWORD** to a password you’ll remember, then redeploy. (2) In **Vercel** → your project → **Settings → Environment Variables**, set **VITE_API_URL** to your Railway URL (e.g. `https://your-app.railway.app`) and redeploy the frontend.
 
 ## Resident ID for you
 

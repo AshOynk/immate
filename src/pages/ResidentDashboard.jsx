@@ -17,7 +17,7 @@ function formatDate(d) {
 export default function ResidentDashboard() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [residentId, setResidentId] = useState(() => searchParams.get('residentId') || '');
+  const [residentId, setResidentId] = useState(() => searchParams.get('residentId') || 'RES-ASH');
   const [name, setName] = useState(() => searchParams.get('name') || '');
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -91,14 +91,14 @@ export default function ResidentDashboard() {
         <div className="dashboard-chat">
           <div className="msg msg--assistant">
             <div className="msg-content">
-              <p><strong>Welcome.</strong> Enter your resident ID to see your tasks and rewards. You'll get notifications when there's something to complete.</p>
+              <p><strong>iMmate dashboard.</strong> Enter your resident ID to see your tasks and submit proof. Your ID is pre-filled — tap Go to open your dashboard.</p>
             </div>
           </div>
         </div>
         <form onSubmit={handleGo} className="dashboard-login">
           <input
             type="text"
-            placeholder="Resident ID"
+            placeholder="Resident ID (e.g. RES-ASH)"
             value={residentId}
             onChange={(e) => setResidentId(e.target.value)}
           />
@@ -109,7 +109,7 @@ export default function ResidentDashboard() {
             onChange={(e) => setName(e.target.value)}
           />
           {error && <p className="dashboard-error">{error}</p>}
-          <button type="submit">Go</button>
+          <button type="submit">Open my dashboard</button>
         </form>
         <p className="dashboard-footer">
           <Link to="/compliance">Submit proof for a task</Link>

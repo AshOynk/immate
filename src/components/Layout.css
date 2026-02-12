@@ -5,38 +5,53 @@
 }
 
 .header {
-  background: var(--color-surface);
-  padding: 16px 24px;
-  display: flex;
+  background: var(--color-bg);
+  padding: 20px 28px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
-  box-shadow: var(--shadow);
+  gap: 16px;
+  border-bottom: 1px solid var(--color-border);
   position: sticky;
   top: 0;
   z-index: 100;
 }
 
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
 .logo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
   text-decoration: none;
 }
 
 .logo-img {
-  height: 36px;
+  height: 32px;
   width: auto;
   display: block;
+  opacity: 1;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 24px;
 }
 
 .header-dashboard {
-  font-size: 0.95rem;
+  font-size: 0.875rem;
   font-weight: 500;
-  color: var(--color-accent);
+  color: var(--color-text-muted);
+  letter-spacing: 0.02em;
 }
 
 .header-dashboard:hover {
-  text-decoration: underline;
+  color: var(--color-text);
 }
 
 .header-auth {
@@ -53,30 +68,25 @@
 .header-logout {
   background: none;
   border: none;
-  font-size: 0.9rem;
-  color: var(--color-accent);
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
   cursor: pointer;
   padding: 0;
 }
 
 .header-logout:hover {
-  text-decoration: underline;
+  color: var(--color-text);
 }
 
 .header-login {
-  font-size: 0.95rem;
+  font-size: 0.875rem;
   font-weight: 500;
-  color: var(--color-accent);
+  color: var(--color-text-muted);
+  letter-spacing: 0.02em;
 }
 
 .header-login:hover {
-  text-decoration: underline;
-}
-
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 32px;
+  color: var(--color-text);
 }
 
 .progress-bar-wrap {
@@ -93,7 +103,7 @@
 
 .progress-value {
   font-weight: 600;
-  color: var(--color-primary);
+  color: var(--color-text);
 }
 
 .progress-bar {
@@ -105,24 +115,34 @@
 
 .progress-fill {
   height: 100%;
-  background: var(--color-primary);
+  background: var(--color-text);
   border-radius: 999px;
   transition: width 0.4s ease;
 }
 
 .main {
   flex: 1;
-  padding: 32px 24px;
-  max-width: 900px;
+  padding: 40px 28px;
+  max-width: 720px;
   margin: 0 auto;
   width: 100%;
 }
 
 @media (max-width: 640px) {
   .header {
-    flex-direction: column;
-    gap: 16px;
-    align-items: stretch;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    gap: 12px;
+  }
+  .header-left {
+    order: 1;
+  }
+  .logo {
+    order: 0;
+  }
+  .header-right {
+    order: 2;
+    justify-content: center;
   }
   .progress-bar-wrap {
     width: 100%;
