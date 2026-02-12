@@ -38,7 +38,9 @@ authRouter.post('/register', async (req, res) => {
     });
   } catch (err) {
     console.error('Register error:', err);
-    res.status(500).json({ error: 'Registration failed' });
+    if (err.code === 11000) return res.status(400).json({ error: 'Username already taken' });
+    if (err.name === 'ValidationError') return res.status(400).json({ error: err.message || 'Invalid input' });
+    res.status(500).json({ error: 'Registration failed. Check that the server and database are running.' });
   }
 });
 

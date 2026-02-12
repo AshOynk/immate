@@ -1,23 +1,25 @@
 :root {
-  --color-bg: #f8f6f3;
-  --color-surface: #ffffff;
+  /* Black & white theme */
+  --color-bg: #0a0a0a;
+  --color-surface: #1a1a1a;
   --color-primary: #58cc02;
-  --color-primary-hover: #4cb302;
-  --color-primary-light: #e5f5d7;
-  --color-accent: #1cb0f6;
-  --color-accent-light: #e5f4fc;
-  --color-text: #3c3c3c;
-  --color-text-muted: #777777;
-  --color-border: #e5e5e5;
+  --color-primary-hover: #6ee76e;
+  --color-primary-light: #1a2e0f;
+  --color-accent: #5eb8ff;
+  --color-accent-light: #0f1f2e;
+  --color-text: #ffffff;
+  --color-text-muted: #a0a0a0;
+  --color-border: #333333;
   --color-success: #58cc02;
-  --color-error: #ff4b4b;
-  --color-warning: #ff9600;
+  --color-error: #ff6b6b;
+  --color-warning: #ffb347;
+  --color-on-primary: #ffffff;
   --font-sans: 'DM Sans', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
   --radius: 16px;
   --radius-sm: 12px;
-  --shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-  --shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+  --shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
 * {

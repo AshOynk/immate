@@ -34,8 +34,8 @@
 }
 
 .msg--assistant .msg-content {
-  background: #f0f0f0;
-  border-color: #e5e5e5;
+  background: var(--color-surface);
+  border-color: var(--color-border);
 }
 
 .msg-content p {
@@ -74,7 +74,7 @@
   margin-top: 0.75rem;
   padding: 0.5rem 1rem;
   background: var(--color-primary);
-  color: #fff;
+  color: var(--color-on-primary);
   border-radius: 12px;
   font-weight: 600;
   font-size: 0.95rem;
@@ -87,7 +87,7 @@
 
 /* Rewards / XP message */
 .msg--xp .msg-content {
-  background: linear-gradient(135deg, #f8f6f3 0%, #e8f4fc 100%);
+  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-accent-light) 100%);
   border-color: var(--color-accent);
 }
 
@@ -142,7 +142,7 @@
   margin-top: 0.75rem;
   padding: 0.6rem 1rem;
   background: var(--color-accent);
-  color: #fff;
+  color: var(--color-on-primary);
   border: none;
   border-radius: 12px;
   font-weight: 600;
@@ -187,7 +187,7 @@
   margin-top: 0.75rem;
   padding: 0.5rem 1rem;
   background: var(--color-accent);
-  color: #fff;
+  color: var(--color-on-primary);
   border-radius: 12px;
   font-weight: 600;
   font-size: 0.95rem;
@@ -235,7 +235,7 @@
 .dashboard-login button {
   padding: 0.75rem 1rem;
   background: var(--color-primary);
-  color: #fff;
+  color: var(--color-on-primary);
   border: none;
   border-radius: var(--radius-sm);
   font-weight: 600;

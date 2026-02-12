@@ -16,6 +16,14 @@
 
 You can create more admins or residents the same way (role: Resident or Admin).
 
+## Resident ID for you
+
+Use this resident ID when the app asks for one (dashboard, submit proof, rewards):
+
+- **RES-ASH**
+
+Use it anywhere you’re prompted for “Resident ID” (e.g. on the dashboard or compliance submit page).
+
 ## API: creating tasks (admin only)
 
 Only logged-in admins can create tasks. Send the JWT in the request:

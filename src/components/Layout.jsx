@@ -14,7 +14,7 @@ export default function Layout({ children }) {
     <div className="layout">
       <header className="header">
         <Link to="/" className="logo">
-          <img src="/images/logo-blk.svg" alt="iMmate" className="logo-img" />
+          <img src="/images/logo-white.svg" alt="iMmate" className="logo-img" />
         </Link>
         <Link to="/dashboard" className="header-dashboard">Dashboard</Link>
         <div className="header-right">

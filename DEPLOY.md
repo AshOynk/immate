@@ -29,19 +29,43 @@ The iOS wrapper (Section 2) uses this URL by default (`EXPO_PUBLIC_WEB_APP_URL=h
 
 ---
 
+## 0. Push the project to GitHub (so Vercel can “load via GitHub”)
+
+Vercel expects the app to come from a GitHub repo. Do this once:
+
+1. **Create a new repo on GitHub**  
+   - [github.com/new](https://github.com/new)  
+   - Name it e.g. `immate` or `hackathon`.  
+   - Don’t add a README, .gitignore, or license (this project already has them).  
+   - Create the repo.
+
+2. **Push this project to it** (from the project folder):
+
+   ```bash
+   cd /Users/ash/Desktop/hackathon
+   git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
+   git push -u origin main
+   ```
+
+   Replace `YOUR_USERNAME` and `YOUR_REPO_NAME` with your GitHub username and repo name. If GitHub asks for auth, use a **Personal Access Token** as the password, or set up SSH and use the `git@github.com:...` URL.
+
+3. **In Vercel**: **Add New… → Project** → **Import Git Repository** → choose your GitHub repo → Continue. Then set build settings and env (step 1 below).
+
+---
+
 ## 1. Finish the web app (deployment checklist)
 
 - [ ] **MongoDB Atlas**: Create cluster, get connection string.
 - [ ] **Railway (backend)**  
-  - New project → Deploy from this repo (root = repo root).  
+  - New project → Deploy from this repo (e.g. “Deploy from GitHub repo” and select the same repo, or connect GitHub and choose it).  
   - **Root Directory**: leave default (repo root).  
   - **Build**: Nixpacks will run `npm install`. No separate build step for server.  
   - **Start Command**: `node server/index.js` (or set in Railway dashboard; `railway.json` already sets this).  
-  - **Env**: `MONGODB_URI`, optionally `ANTHROPIC_API_KEY`, `EUFY_WEBHOOK_URL`, `WEEKLY_STAR_TARGET`, `VOUCHER_TIERS`.  
+  - **Env**: `MONGODB_URI`, optionally `ANTHROPIC_API_KEY`, `EUFY_WEBHOOK_URL`, `WEEKLY_STAR_TARGET`, `VOUCHER_TIERS`, `JWT_SECRET`.  
   - Deploy and copy the public URL (e.g. `https://your-app.railway.app`).
 - [ ] **Vercel (frontend)**  
-  - Import this repo.  
-  - **Framework Preset**: Other (or Vite).  
+  - **Add New… → Project** → **Import** your GitHub repo (the one you pushed in step 0).  
+  - **Framework Preset**: Vite (or Other).  
   - **Build Command**: `npm run build`  
   - **Output Directory**: `dist`  
   - **Env**: `VITE_API_URL` = your Railway URL (e.g. `https://your-app.railway.app`) — **no trailing slash**.  

@@ -35,11 +35,13 @@ export default function Login() {
         body: JSON.stringify(body),
       });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || (mode === 'register' ? 'Registration failed' : 'Login failed'));
+      const message = data.error || (res.status === 0 || !res.ok ? 'Cannot reach server. Check your connection and that the API URL is set (VITE_API_URL on Vercel).' : (mode === 'register' ? 'Registration failed' : 'Login failed'));
+      if (!res.ok) throw new Error(message);
       login(data.token, data.user);
       navigate(from, { replace: true });
     } catch (err) {
-      setError(err.message || 'Something went wrong');
+      const msg = err.message || 'Something went wrong';
+      setError(err.name === 'TypeError' && msg.includes('fetch') ? 'Cannot reach server. Is the backend running? Set VITE_API_URL in production.' : msg);
     } finally {
       setLoading(false);
     }
@@ -52,12 +54,12 @@ export default function Login() {
         <p className="login-subtitle">{mode === 'login' ? 'Sign in' : 'Create account'}</p>
         <form onSubmit={handleSubmit} className="login-form">
           <label>
-            Username
+            Email or username
             <input
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="Email or username"
+              placeholder="e.g. ash@oynk.co.uk"
               required
               autoComplete="username"
             />
