@@ -90,9 +90,27 @@ export default function ComplianceSubmit() {
   const [previewUrl, setPreviewUrl] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
+  const [videoDevices, setVideoDevices] = useState([]);
+  const [selectedCameraId, setSelectedCameraId] = useState('');
   const streamRef = useRef(null);
   const recorderRef = useRef(null);
   const chunksRef = useRef([]);
+  const liveVideoRef = useRef(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    navigator.mediaDevices.enumerateDevices()
+      .then((devices) => {
+        if (cancelled) return;
+        const videoInputs = devices.filter((d) => d.kind === 'videoinput');
+        setVideoDevices(videoInputs);
+        if (videoInputs.length > 0) {
+          setSelectedCameraId((prev) => prev || videoInputs[0].deviceId);
+        }
+      })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, []);
 
   useEffect(() => {
     fetch(`${API_BASE}/api/tasks?active=true&inWindow=true`)
@@ -123,8 +141,11 @@ export default function ComplianceSubmit() {
     }
     setMessage(null);
     try {
+      const videoConstraints = selectedCameraId
+        ? { deviceId: { exact: selectedCameraId }, width: { ideal: 1280 }, height: { ideal: 720 } }
+        : { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } };
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
+        video: videoConstraints,
         audio: true,
       });
       streamRef.current = stream;
@@ -147,7 +168,17 @@ export default function ComplianceSubmit() {
     } catch (err) {
       setMessage({ type: 'error', text: 'Camera/mic access denied or unavailable.' });
     }
-  }, [taskId, residentId]);
+  }, [taskId, residentId, selectedCameraId]);
+
+  // Show live camera feed on the video element when recording starts
+  useEffect(() => {
+    if (!recording || !streamRef.current) return;
+    const video = liveVideoRef.current;
+    if (video) {
+      video.srcObject = streamRef.current;
+      video.play().catch(() => {});
+    }
+  }, [recording]);
 
   const stopRecording = useCallback(() => {
     if (recorderRef.current && recording) {
@@ -255,6 +286,22 @@ export default function ComplianceSubmit() {
           />
         </label>
         <label>
+          Camera
+          <select
+            value={selectedCameraId}
+            onChange={(e) => setSelectedCameraId(e.target.value)}
+            disabled={recording || loading}
+            className="compliance-camera-select"
+          >
+            {videoDevices.length === 0 && <option value="">No cameras found</option>}
+            {videoDevices.map((d, i) => (
+              <option key={d.deviceId} value={d.deviceId}>
+                {d.label || `Camera ${i + 1}`}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
           Video (recorded live)
           <div className="recording-zone">
             {!recording && !recordedBlob && (
@@ -264,6 +311,13 @@ export default function ComplianceSubmit() {
             )}
             {recording && (
               <>
+                <video
+                  ref={liveVideoRef}
+                  autoPlay
+                  playsInline
+                  muted
+                  className="compliance-live-preview"
+                />
                 <div className="recording-indicator">
                   <span className="rec-dot" /> Recording… (click Stop when done)
                 </div>
