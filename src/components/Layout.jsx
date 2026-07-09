@@ -32,6 +32,7 @@ export default function Layout({ children }) {
           {onLearnPage && <Badges />}
           <Link to="/compliance/dashboard" className="header-dashboard">Review</Link>
           <Link to="/compliance/request" className="header-dashboard">Request</Link>
+          <a href="/expenses/index.html" className="header-dashboard">Expenses</a>
         </div>
       </header>
       <main className="main">{children}</main>

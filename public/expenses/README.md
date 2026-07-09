@@ -3,8 +3,11 @@
 A self-contained website that explores MPs' business costs & expenses **by party**,
 **by individual**, and **compares average claims across parties**.
 
-No build step, no server, no dependencies — it's plain HTML/CSS/JS. Open
-`index.html` or serve the folder statically.
+No build step, no server, no dependencies — it's plain HTML/CSS/JS. It lives in
+the app's `public/` folder, so it's served at **`/expenses/`** in every
+environment (Vite dev, the Express server, and Vercel) and is reachable from the
+main app's header via the **Expenses** link. You can also open `index.html`
+directly or serve the folder statically on its own.
 
 ## Features
 
