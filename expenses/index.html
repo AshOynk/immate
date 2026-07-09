@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Political Expenses Tracker</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232a78d6'/%3E%3Crect x='7' y='16' width='4' height='9' rx='1' fill='%23fff'/%3E%3Crect x='14' y='11' width='4' height='14' rx='1' fill='%23fff'/%3E%3Crect x='21' y='7' width='4' height='18' rx='1' fill='%23fff'/%3E%3C/svg%3E" />
+  <meta name="description" content="Explore UK MPs' business costs and expenses by party and by individual, and compare average claims across parties." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <header class="site">
+    <div class="wrap">
+      <div class="brand">
+        <b>Expenses<span style="color:var(--accent)">·</span>Tracker</b>
+        <span id="periodLabel"></span>
+      </div>
+      <input type="file" id="csvInput" accept=".csv,text/csv" class="hidden" />
+      <button class="btn" id="importBtn" title="Load an official IPSA CSV export">⬆ Import CSV</button>
+      <button class="btn" id="exportBtn" title="Download the current table as CSV">⬇ Export</button>
+      <button class="theme-btn" id="themeBtn">◐ Theme</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <div class="wrap" role="tablist">
+      <button class="tab" role="tab" data-view="overview" aria-selected="true">Overview</button>
+      <button class="tab" role="tab" data-view="parties" aria-selected="false">By Party</button>
+      <button class="tab" role="tab" data-view="individuals" aria-selected="false">By Individual</button>
+      <button class="tab" role="tab" data-view="compare" aria-selected="false">Compare</button>
+    </div>
+  </nav>
+
+  <main>
+    <div class="wrap">
+      <div class="banner" id="dataBanner"></div>
+
+      <!-- OVERVIEW -->
+      <section class="view active" id="view-overview">
+        <div class="tiles" id="tiles"></div>
+        <div class="card">
+          <h2>Average expenses claim per MP, by party</h2>
+          <div class="sub">Total business costs claimed in the period ÷ number of members. Bars are coloured by party.</div>
+          <div class="chart-wrap"><div id="chartPartyAvg"></div></div>
+          <div class="legend" id="legendPartyAvg"></div>
+        </div>
+        <div class="card">
+          <h2>Total spend by party</h2>
+          <div class="sub">Sum of all claims. Larger parties naturally claim more in total — use the average chart above to compare like-for-like.</div>
+          <div class="chart-wrap"><div id="chartPartyTotal"></div></div>
+        </div>
+        <div class="card">
+          <h2>Where the money goes</h2>
+          <div class="sub">Share of all spending by expense category.</div>
+          <div class="chart-wrap"><div id="chartCategory"></div></div>
+          <div class="legend" id="legendCategory"></div>
+        </div>
+      </section>
+
+      <!-- BY PARTY -->
+      <section class="view" id="view-parties">
+        <div class="party-grid" id="partyGrid"></div>
+        <div id="partyDetail"></div>
+      </section>
+
+      <!-- BY INDIVIDUAL -->
+      <section class="view" id="view-individuals">
+        <div class="controls">
+          <input type="search" id="search" placeholder="Search MP or constituency…" />
+          <select id="partyFilter"><option value="">All parties</option></select>
+          <select id="sortBy">
+            <option value="total">Sort: Total (high→low)</option>
+            <option value="totalAsc">Sort: Total (low→high)</option>
+            <option value="name">Sort: Name (A→Z)</option>
+            <option value="party">Sort: Party</option>
+            <option value="vsParty">Sort: vs party avg</option>
+          </select>
+          <div class="spacer"></div>
+          <span class="tag" id="rowCount"></span>
+        </div>
+        <div class="table-scroll">
+          <table class="data" id="mpTable">
+            <thead>
+              <tr>
+                <th data-sort="name">MP</th>
+                <th data-sort="party">Party</th>
+                <th data-sort="constituency">Constituency</th>
+                <th data-sort="total" class="num">Total claimed</th>
+                <th data-sort="vsParty" class="num">vs party avg</th>
+                <th data-sort="vsNational" class="num">vs national avg</th>
+              </tr>
+            </thead>
+            <tbody id="mpTbody"></tbody>
+          </table>
+        </div>
+        <div id="mpDetail"></div>
+      </section>
+
+      <!-- COMPARE -->
+      <section class="view" id="view-compare">
+        <div class="card">
+          <h2>Compare average claim per MP</h2>
+          <div class="sub">Pick two parties to compare their average member claim head-to-head, with category breakdown.</div>
+          <div class="controls">
+            <label class="tag">Party A</label>
+            <select id="cmpA"></select>
+            <label class="tag">Party B</label>
+            <select id="cmpB"></select>
+          </div>
+          <div id="cmpResult"></div>
+        </div>
+        <div class="card">
+          <h2>Every party vs the national average</h2>
+          <div class="sub">How each party's average member claim deviates from the all-MP average.</div>
+          <div class="chart-wrap"><div id="chartDeviation"></div></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site">
+    <div class="wrap" id="footer"></div>
+  </footer>
+
+  <div id="tip"></div>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>
